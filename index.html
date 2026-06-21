@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarTrack | Student Management System</title>
+<style>
+  /* THEME COLORS — NAVY & EMERALD
+     Primary (Dark Navy):    #0F172A
+     Secondary (Royal Blue): #2563EB
+     Accent (Emerald):       #10B981
+     Background:             #F8FAFC
+     Cards:                  #FFFFFF
+     Text:                   #1E293B
+     Highlight (Amber):      #d97706
+     Muted Text:             #6b7280
+  */
+  * { box-sizing:border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin:0; padding:0; background:#F8FAFC; color:#1E293B; line-height:1.5; }
+  .container { max-width:1100px; margin:0 auto; padding:0 20px; }
+
+  /* HEADER */
+  header { background:#ffffff; border-bottom:1px solid #e2e8f0; }
+  header .container { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:18px 20px; gap:15px; }
+  .brand { display:flex; align-items:center; }
+  .brand img { height:48px; width:48px; margin-right:14px; border-radius:6px; }
+  .brand h1 { margin:0; font-size:22px; color:#0F172A; font-weight:700; }
+  .brand p { margin:2px 0 0; font-size:12px; color:#10B981; font-weight:600; letter-spacing:0.4px; }
+  .student-info { text-align:right; font-size:13px; color:#6b7280; line-height:1.6; }
+  .student-info strong { color:#1E293B; }
+
+  /* NAV */
+  nav { background:#0F172A; }
+  nav .container { padding:0 20px; }
+  nav ul { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; justify-content:center; }
+  nav ul li a { display:block; color:#e2e8f0; text-decoration:none; padding:14px 20px; font-size:14px; font-weight:500; }
+  nav ul li a:hover { background:#10B981; color:#fff; }
+
+  /* SECTIONS */
+  section { padding:40px 0; }
+  section .container { width:100%; }
+  h2 { font-size:21px; font-weight:700; color:#0F172A; border-left:4px solid #10B981; padding-left:14px; margin:0 0 20px; }
+
+  .welcome { background:#fff; border-radius:8px; padding:30px; box-shadow:0 2px 10px rgba(15,23,42,0.08); border-top:3px solid #10B981; }
+  .welcome p { color:#374151; margin:10px 0; }
+
+  /* ROLE LOGIN */
+  .role-login { background:#fff; padding:28px; border-radius:8px; box-shadow:0 2px 10px rgba(15,23,42,0.08); max-width:420px; border-top:3px solid #0F172A; }
+  .role-login label { display:block; margin-top:14px; font-weight:600; font-size:13px; color:#0F172A; }
+  .role-login select, .role-login input { width:100%; padding:10px; margin-top:6px; border:1px solid #d1d5db; border-radius:5px; font-size:14px; }
+
+  /* STATS — grid for even alignment */
+  .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:18px; }
+  .stat-box { background:#fff; padding:24px 16px; border-radius:8px; text-align:center; box-shadow:0 2px 10px rgba(15,23,42,0.06); border-bottom:3px solid #10B981; }
+  .stat-box.alt { border-bottom-color:#0F172A; }
+  .stat-box.amber { border-bottom-color:#d97706; }
+  .stat-box.green { border-bottom-color:#15803d; }
+  .stat-box h3 { margin:0 0 6px; font-size:26px; color:#0F172A; font-weight:700; }
+  .stat-box p { margin:0; font-size:12.5px; color:#6b7280; }
+
+  /* FEATURES / SERVICES — grid for equal-height columns */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .two-col > div { background:#fff; padding:28px; border-radius:8px; box-shadow:0 2px 10px rgba(15,23,42,0.08); border-top:3px solid #0F172A; }
+  .two-col ul, .two-col ol { margin:0; padding-left:20px; }
+  .two-col li { margin-bottom:8px; color:#374151; }
+
+  /* MARQUEE */
+  marquee { display:block; background:#fff; padding:14px 18px; font-weight:600; border-radius:8px; color:#0F172A; border:1px solid #d1e0ea; box-shadow:0 2px 10px rgba(15,23,42,0.06); }
+
+  /* FORM */
+  form { background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(15,23,42,0.08); max-width:600px; border-top:3px solid #10B981; }
+  form label { display:block; margin-top:14px; font-weight:600; font-size:13px; color:#0F172A; }
+  form input, form select, form textarea { width:100%; padding:10px; margin-top:6px; border:1px solid #d1d5db; border-radius:5px; font-size:14px; }
+  form .radio-group { margin-top:8px; }
+  form .radio-group label { display:inline-block; font-weight:normal; margin-right:18px; color:#1E293B; }
+  form .radio-group input { width:auto; margin-top:0; vertical-align:middle; }
+  .btn-group { margin-top:22px; }
+  button { padding:11px 24px; border:none; border-radius:5px; cursor:pointer; font-size:14px; margin-right:10px; font-weight:600; }
+  .submit-btn { background:#0F172A; color:#fff; }
+  .submit-btn:hover { background:#10B981; }
+  .reset-btn { background:#e5e7eb; color:#1E293B; }
+  .reset-btn:hover { background:#d1d5db; }
+
+  /* TABLES */
+  .table-wrap { background:#fff; border-radius:8px; box-shadow:0 2px 10px rgba(15,23,42,0.08); overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  table th, table td { padding:13px 16px; text-align:left; font-size:14px; border-bottom:1px solid #e5e7eb; }
+  table th { background:#0F172A; color:#fff; font-weight:600; font-size:13px; }
+  table tr:last-child td { border-bottom:none; }
+  table tr:hover td { background:#f4f8f9; }
+  .grade-A { color:#15803d; font-weight:700; }
+  .grade-B { color:#2563eb; font-weight:700; }
+  .grade-C { color:#d97706; font-weight:700; }
+
+  /* CONTACT */
+  .contact-info { background:#fff; padding:28px; border-radius:8px; box-shadow:0 2px 10px rgba(15,23,42,0.08); border-top:3px solid #10B981; }
+  .contact-info p { margin:10px 0; color:#374151; }
+  .contact-info a { color:#0F172A; text-decoration:none; font-weight:600; }
+  .contact-info a:hover { color:#10B981; }
+
+  /* FOOTER */
+  footer { background:#0F172A; color:#cbd5e1; text-align:center; padding:22px 0; font-size:13px; margin-top:10px; }
+
+  /* RESPONSIVE */
+  @media (max-width:768px) {
+    header .container { flex-direction:column; align-items:flex-start; }
+    .student-info { text-align:left; }
+    .two-col { grid-template-columns:1fr; }
+    nav ul li a { padding:12px 14px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="brand">
+      <img src="logo.jpg" alt="ScholarTrack Logo">
+      <div>
+        <h1>ScholarTrack</h1>
+        <p>CONNECTING STUDENTS, TEACHERS & PARENTS</p>
+      </div>
+    </div>
+    <div class="student-info">
+      <p><strong>Student Name:</strong> Madhavan</p>
+      <p><strong>Register Number:</strong> 029</p>
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="container">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#reports">Reports</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#logout">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- WELCOME SECTION -->
+<section id="home">
+  <div class="container">
+    <div class="welcome">
+      <h2>Welcome to ScholarTrack</h2>
+      <p>ScholarTrack is a Student Management System that allows <strong>Students</strong>, <strong>Teachers</strong>, and <strong>Parents</strong> to log in with their own account ID and view report cards, scores, attendance, and overall academic performance in one secure platform.</p>
+      <p><strong>Vision:</strong> To create a transparent bridge between school, students, and home through accessible academic data.</p>
+      <p><strong>Mission:</strong> To simplify performance tracking and improve communication between teachers, students, and parents.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE-BASED LOGIN -->
+<section>
+  <div class="container">
+    <h2>Login by Role</h2>
+    <div class="role-login">
+      <label for="role">Select Your Role</label>
+      <select id="role" name="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="parent">Parent</option>
+      </select>
+
+      <label for="accountid">Account ID</label>
+      <input type="text" id="accountid" name="accountid" placeholder="Enter your Account ID">
+
+      <label for="loginpass">Password</label>
+      <input type="password" id="loginpass" name="loginpass" placeholder="Enter your password">
+
+      <div class="btn-group">
+        <button type="submit" class="submit-btn">Login</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD STATISTICS -->
+<section id="dashboard">
+  <div class="container">
+    <h2>Dashboard Statistics</h2>
+    <div class="stats">
+      <div class="stat-box"><h3>1,250</h3><p>Total Users</p></div>
+      <div class="stat-box alt"><h3>980</h3><p>Active Users</p></div>
+      <div class="stat-box amber"><h3>₹85,000</h3><p>Revenue (Fees Collected)</p></div>
+      <div class="stat-box"><h3>3,420</h3><p>Transactions</p></div>
+      <div class="stat-box alt"><h3>27</h3><p>Notifications</p></div>
+      <div class="stat-box amber"><h3>9</h3><p>Pending Tasks</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES & SERVICES -->
+<section>
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <h2>Features</h2>
+        <ul>
+          <li>Role-based Login for Student, Teacher, and Parent</li>
+          <li>Real-time Report Card & Score Viewing</li>
+          <li>Attendance Tracking</li>
+          <li>Performance Graphs & Progress Reports</li>
+          <li>Secure Profile & Data Privacy per Account</li>
+        </ul>
+      </div>
+      <div id="services">
+        <h2>Services</h2>
+        <ol>
+          <li>Student Report Card Generation</li>
+          <li>Teacher Grade & Marks Entry</li>
+          <li>Parent-Teacher Communication Portal</li>
+          <li>Exam Schedule & Result Publishing</li>
+          <li>Performance Analytics for Each Child</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST UPDATES -->
+<section>
+  <div class="container">
+    <h2>Latest Updates</h2>
+    <marquee behavior="scroll" direction="left" scrollamount="5">
+      📢 Mid-term report cards published! &nbsp;|&nbsp; 📢 Parent-Teacher meeting on 30th June &nbsp;|&nbsp; 📢 New performance dashboard for parents is now live!
+    </marquee>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<section>
+  <div class="container">
+    <h2>Registration Form</h2>
+    <form>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter full name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+      <label>Gender</label>
+      <div class="radio-group">
+        <label><input type="radio" name="gender" value="male"> Male</label>
+        <label><input type="radio" name="gender" value="female"> Female</label>
+        <label><input type="radio" name="gender" value="other"> Other</label>
+      </div>
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob">
+
+      <label for="address">Address</label>
+      <textarea id="address" name="address" rows="3" placeholder="Enter address"></textarea>
+
+      <label for="usertype">Register As</label>
+      <select id="usertype" name="usertype">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="parent">Parent</option>
+      </select>
+
+      <div class="btn-group">
+        <button type="submit" class="submit-btn">Submit</button>
+        <button type="reset" class="reset-btn">Reset</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- REPORT CARD / PERFORMANCE TABLE -->
+<section id="reports">
+  <div class="container">
+    <h2>Sample Report Card — Performance Overview</h2>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Subject</th>
+          <th>Marks (out of 100)</th>
+          <th>Grade</th>
+          <th>Teacher Remarks</th>
+        </tr>
+        <tr>
+          <td>Mathematics</td>
+          <td>92</td>
+          <td class="grade-A">A</td>
+          <td>Excellent problem-solving skills</td>
+        </tr>
+        <tr>
+          <td>Science</td>
+          <td>85</td>
+          <td class="grade-A">A</td>
+          <td>Strong conceptual understanding</td>
+        </tr>
+        <tr>
+          <td>English</td>
+          <td>78</td>
+          <td class="grade-B">B</td>
+          <td>Good, needs improvement in grammar</td>
+        </tr>
+        <tr>
+          <td>Social Studies</td>
+          <td>70</td>
+          <td class="grade-B">B</td>
+          <td>Satisfactory performance</td>
+        </tr>
+        <tr>
+          <td>Computer Science</td>
+          <td>95</td>
+          <td class="grade-A">A</td>
+          <td>Outstanding logical thinking</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION MODULES TABLE -->
+<section>
+  <div class="container">
+    <h2>Application Modules</h2>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Module ID</th>
+          <th>Module Name</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>M001</td>
+          <td>Authentication Module</td>
+          <td>Role-based login for Student, Teacher, and Parent accounts</td>
+        </tr>
+        <tr>
+          <td>M002</td>
+          <td>Report Card Module</td>
+          <td>Generates and displays subject-wise marks and grades</td>
+        </tr>
+        <tr>
+          <td>M003</td>
+          <td>Attendance Module</td>
+          <td>Tracks daily attendance of each student</td>
+        </tr>
+        <tr>
+          <td>M004</td>
+          <td>Performance Analytics</td>
+          <td>Shows progress trends and comparison over terms</td>
+        </tr>
+        <tr>
+          <td>M005</td>
+          <td>Communication Module</td>
+          <td>Enables messaging between teachers and parents</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <h2>About</h2>
+    <div class="welcome">
+      <p>ScholarTrack is built as an academic project to demonstrate a Student Management System where students, teachers, and parents each access role-specific dashboards to track academic performance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT INFORMATION -->
+<section id="contact">
+  <div class="container">
+    <h2>Contact Information</h2>
+    <div class="contact-info">
+      <p>📧 Email: support@scholartrack.com</p>
+      <p>📞 Phone: +91 98765 43210</p>
+      <p>📍 Address: 123 Knowledge Avenue, Tiruppur, Tamil Nadu, India</p>
+      <p>🔗 Social Media:
+        <a href="#">Facebook</a> |
+        <a href="#">Instagram</a> |
+        <a href="#">LinkedIn</a> |
+        <a href="#">Twitter</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="logout">
+  <p>&copy; 2026 ScholarTrack. Designed by [Your Name]</p>
+</footer>
+
+</body>
+</html>
