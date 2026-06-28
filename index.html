@@ -8,409 +8,617 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ===== CSS VARIABLES & THEME ===== */
   :root {
     --bg-deep: #050505;
     --accent-violet: #8B5CF6;
     --accent-magenta: #D946EF;
     --text-primary: #F8FAFC;
     --text-secondary: #CBD5E1;
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(255,255,255,0.03);
+    --glass-border: rgba(255,255,255,0.08);
     --glass-blur: blur(12px);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    --card-bg: rgba(255,255,255,0.03);
+    --input-bg: #1a1a1a;
+    --success: #10B981;
+    --error: #EF4444;
   }
 
+  /* LIGHT THEME */
+  body.light-mode {
+    --bg-deep: #f0f2f5;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a5568;
+    --glass-bg: rgba(255,255,255,0.7);
+    --glass-border: rgba(0,0,0,0.1);
+    --card-bg: rgba(255,255,255,0.8);
+    --input-bg: #fff;
+  }
+  body.light-mode { background-color: var(--bg-deep); color: var(--text-primary); }
+  body.light-mode .fixed-top { background: rgba(240,242,245,0.95); }
+  body.light-mode input, body.light-mode select, body.light-mode textarea { background: #fff; color: #1a1a2e; border-color: #ccc; }
+  body.light-mode nav ul li a { color: #4a5568; }
+  body.light-mode table th { color: var(--accent-violet); background: rgba(139,92,246,0.05); }
+  body.light-mode table td { color: #1a1a2e; }
+  body.light-mode .reset-btn { background: rgba(0,0,0,0.05); color: #1a1a2e; }
+  body.light-mode .reset-btn:hover { background: rgba(0,0,0,0.1); }
+  body.light-mode .notif-panel h3 { color: #1a1a2e; }
+  body.light-mode .notif-item strong { color: #1a1a2e; }
+  body.light-mode .stat-box h3 { color: var(--accent-violet); }
+  body.light-mode .stat-box p { color: #4a5568; }
+
   * { box-sizing: border-box; }
-  
-  body { 
-    font-family: 'Outfit', sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    padding-top: 180px; /* Offset for fixed header + nav + ticker */
-    background-color: var(--bg-deep); 
-    background-image: 
-      radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 25%),
-      radial-gradient(circle at 100% 100%, rgba(217, 70, 239, 0.1) 0%, transparent 25%);
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    margin: 0; padding: 0;
+    padding-top: 155px;
+    background-color: var(--bg-deep);
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(139,92,246,0.1) 0%, transparent 25%),
+      radial-gradient(circle at 100% 100%, rgba(217,70,239,0.08) 0%, transparent 25%);
     background-attachment: fixed;
-    color: var(--text-primary); 
-    line-height: 1.6; 
+    color: var(--text-primary);
+    line-height: 1.6;
     overflow-x: hidden;
+    transition: background-color 0.4s, color 0.4s;
   }
 
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-  /* GLASSMORPHISM UTILITY */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
   }
 
-  /* FIXED TOP WRAPPER */
+  /* ===== FIXED TOP ===== */
   .fixed-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: rgba(5, 5, 5, 0.9);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(5,5,5,0.92);
     backdrop-filter: blur(15px);
     border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 15px;
+    padding-bottom: 6px;
+    transition: background 0.4s;
   }
 
-  header { 
-    padding: 15px 0;
-  }
+  header { padding: 8px 0; }
   header .container { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-  
+
   .brand { display: flex; align-items: center; gap: 16px; }
   .brand-logo-mock {
-    width: 44px;
-    height: 44px;
+    width: 36px; height: 36px;
     background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 20px;
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px;
+    box-shadow: 0 0 15px rgba(139,92,246,0.4);
+    animation: pulse-glow 2s ease-in-out infinite;
   }
-  .brand h1 { 
-    margin: 0; 
-    font-size: 24px; 
-    font-weight: 700; 
-    letter-spacing: -0.5px; 
-    background: linear-gradient(to right, #fff, #a78bfa); 
-    -webkit-background-clip: text; 
-    background-clip: text; 
-    -webkit-text-fill-color: transparent; 
+  .brand h1 {
+    margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(to right, #fff, #a78bfa);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  .brand p { margin: 0; font-size: 10px; color: var(--accent-violet); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  
+  .brand p { margin: 0; font-size: 9px; color: var(--accent-violet); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  /* HEADER RIGHT CONTROLS */
+  .header-right { display: flex; align-items: center; gap: 16px; }
   .student-info { text-align: right; font-size: 14px; color: var(--text-secondary); border-left: 1px solid var(--glass-border); padding-left: 20px; }
   .student-info strong { color: var(--accent-violet); font-weight: 600; }
 
-  /* NAV */
-  nav { margin-top: 10px; }
-  nav ul { list-style: none; margin: 0; padding: 10px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-  nav ul li a { 
-    display: block; 
-    color: var(--text-secondary); 
-    text-decoration: none; 
-    padding: 10px 20px; 
-    font-size: 14px; 
-    font-weight: 500; 
-    border-radius: 10px;
+  /* DATE-TIME */
+  #datetime-display {
+    font-size: 12px; color: var(--text-secondary);
+    text-align: center; line-height: 1.2;
+    padding: 0 14px; border-left: 1px solid var(--glass-border);
+  }
+  #datetime-display .time { font-size: 16px; font-weight: 700; color: var(--accent-violet); }
+
+  /* THEME SWITCHER */
+  .theme-btn {
+    padding: 6px 14px; border: 1px solid var(--glass-border); border-radius: 30px;
+    background: var(--glass-bg); color: var(--text-primary);
+    cursor: pointer; font-size: 12px; font-weight: 600;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .theme-btn:hover { background: rgba(139,92,246,0.2); border-color: var(--accent-violet); }
+
+  /* NOTIFICATION BELL */
+  .notif-btn {
+    position: relative; background: none; border: none;
+    font-size: 20px; cursor: pointer; padding: 0 4px;
     transition: var(--transition);
   }
-  nav ul li a:hover { 
-    background: rgba(139, 92, 246, 0.1); 
-    color: var(--accent-violet); 
+  .notif-btn:hover { transform: scale(1.2); }
+  .notif-badge {
+    position: absolute; top: -2px; right: -2px;
+    background: var(--accent-magenta); color: #fff;
+    border-radius: 50%; width: 16px; height: 16px;
+    font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    animation: bounce 1s ease-in-out infinite;
+  }
+
+  /* NOTIFICATION PANEL */
+  .notif-panel {
+    position: fixed; top: 200px; right: 20px; z-index: 999; width: 320px;
+    display: none; animation: slideInRight 0.3s ease;
+  }
+  .notif-panel.show { display: block; }
+  .notif-panel .glass { padding: 20px; }
+  .notif-panel h3 { margin: 0 0 14px; font-size: 16px; }
+  .notif-item { padding: 12px 0; border-bottom: 1px solid var(--glass-border); font-size: 13px; color: var(--text-secondary); }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-item strong { color: var(--text-primary); }
+  .close-notif { float: right; cursor: pointer; background: none; border: none; color: var(--accent-magenta); font-size: 18px; font-weight: 700; }
+
+  /* NAV */
+  nav { margin-top: 4px; }
+  nav ul { list-style: none; margin: 0; padding: 4px; display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; }
+  nav ul li a {
+    display: block; color: var(--text-secondary); text-decoration: none;
+    padding: 7px 15px; font-size: 13px; font-weight: 500; border-radius: 10px;
+    transition: var(--transition);
+  }
+  nav ul li a:hover, nav ul li a.active {
+    background: rgba(139,92,246,0.15); color: var(--accent-violet);
     transform: translateY(-2px);
   }
 
   /* SECTIONS */
   section { padding: 60px 0; }
-  h2 { 
-    font-size: 28px; 
-    font-weight: 700; 
-    margin-bottom: 30px; 
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  h2 {
+    font-size: 28px; font-weight: 700; margin-bottom: 30px;
+    display: flex; align-items: center; gap: 12px;
   }
   h2::before {
-    content: '';
-    display: block;
-    width: 4px;
-    height: 28px;
-    background: var(--accent-violet);
-    border-radius: 4px;
+    content: ''; display: block; width: 4px; height: 28px;
+    background: var(--accent-violet); border-radius: 4px;
     box-shadow: 0 0 10px var(--accent-violet);
   }
 
-  /* CARDS */
   .card { padding: 40px; }
   .welcome { position: relative; overflow: hidden; }
   .welcome::after {
     content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+    position: absolute; top: -50%; right: -20%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
     pointer-events: none;
   }
 
+  /* TYPING EFFECT */
+  .typing-text { color: var(--accent-violet); }
+  .typing-cursor { animation: blink 0.7s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* SLIDER */
+  .slider-wrap {
+    position: relative; overflow: hidden; border-radius: 16px; margin-top: 10px;
+    height: 220px;
+  }
+  .slider-track {
+    display: flex; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    height: 100%;
+  }
+  .slide {
+    min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 700; border-radius: 16px;
+    background-size: cover; background-position: center;
+    flex-direction: column; gap: 10px; padding: 40px;
+    text-align: center; color: #fff; position: relative;
+    overflow: hidden;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(5,5,5,0.4), rgba(5,5,5,0.8));
+    z-index: 1;
+  }
+  .slide > * { position: relative; z-index: 2; }
+  .slide p { margin: 0; font-size: 15px; opacity: 0.9; font-weight: 400; max-width: 600px; }
+  .slider-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.4); color: #fff; border: none; border-radius: 12px;
+    width: 44px; height: 44px; font-size: 20px; cursor: pointer;
+    transition: var(--transition); display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px); border: 1px solid var(--glass-border);
+  }
+  .slider-btn:hover { background: rgba(139,92,246,0.5); }
+  .slider-prev { left: 14px; }
+  .slider-next { right: 14px; }
+  .slider-dots { text-align: center; margin-top: 14px; display: flex; justify-content: center; gap: 8px; }
+  .slider-dots span {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--glass-border);
+    cursor: pointer; transition: var(--transition); display: inline-block;
+  }
+  .slider-dots span.active { background: var(--accent-violet); transform: scale(1.3); }
+
   /* STATS */
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .stat-box { 
-    padding: 30px 20px; 
-    text-align: center; 
-    transition: var(--transition);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .stat-box {
+    padding: 30px 20px; text-align: center; transition: var(--transition);
+    border: 1px solid var(--glass-border); border-radius: 12px; cursor: default;
+    background: var(--glass-bg);
   }
-  .stat-box:hover { 
-    transform: translateY(-5px); 
+  .stat-box:hover {
+    transform: translateY(-8px) scale(1.02);
     border-color: var(--accent-violet);
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(139,92,246,0.1);
+    box-shadow: 0 0 35px rgba(139,92,246,0.35), 0 10px 20px rgba(0,0,0,0.2);
   }
-  .stat-box h3 { margin: 0 0 8px; font-size: 32px; font-weight: 700; color: #fff; }
+  .stat-box h3 { margin: 0 0 8px; font-size: 32px; font-weight: 700; color: var(--text-primary); }
   .stat-box p { margin: 0; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+  .stat-icon { font-size: 28px; margin-bottom: 10px; }
 
-  @media (max-width: 900px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 600px) {
-    .stats { grid-template-columns: 1fr; }
+  /* PROGRESS BARS */
+  .progress-wrap { margin-top: 8px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+  .progress-bar-bg { background: rgba(255,255,255,0.08); border-radius: 999px; height: 8px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%; border-radius: 999px;
+    background: linear-gradient(to right, var(--accent-violet), var(--accent-magenta));
+    width: 0; transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
   }
 
-  /* TWO-COL GRID */
+  /* TWO-COL */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
   .two-col ul, .two-col ol { margin: 20px 0 0; padding-left: 20px; }
   .two-col li { margin-bottom: 12px; color: var(--text-secondary); }
 
-  /* ENHANCED NEWS TICKER */
+  /* FEATURES CARDS */
+  .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .feature-card {
+    padding: 28px; border-radius: 14px; border: 1px solid var(--glass-border);
+    text-align: center; transition: var(--transition); cursor: default;
+    background: var(--glass-bg);
+  }
+  .feature-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--accent-violet);
+    background: rgba(139,92,246,0.1);
+    box-shadow: 0 0 35px rgba(139,92,246,0.3), 0 10px 20px rgba(0,0,0,0.15);
+  }
+  .feature-icon { font-size: 36px; margin-bottom: 12px; animation: rotate-float 4s ease-in-out infinite; }
+  .feature-card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+  .feature-card p { margin: 0; font-size: 13px; color: var(--text-secondary); }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+  .service-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 22px; border-radius: 12px; border: 1px solid var(--glass-border);
+    background: var(--glass-bg); transition: var(--transition); cursor: default;
+  }
+  .service-item:hover { border-color: var(--accent-magenta); background: rgba(217,70,239,0.08); transform: translateX(6px) scale(1.01); box-shadow: 0 0 25px rgba(217,70,239,0.2); }
+  .service-num {
+    font-size: 24px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; min-width: 36px;
+  }
+  .service-item h4 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+  .service-item p { margin: 0; font-size: 13px; color: var(--text-secondary); }
+
+  /* NEWS TICKER */
   .news-ticker-container {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    overflow: hidden;
-    padding: 0;
-    height: 42px;
-    border-radius: 12px;
+    margin-top: 8px; display: flex; align-items: center; gap: 0;
+    overflow: hidden; padding: 0; height: 40px; border-radius: 12px;
   }
   .ticker-label {
     background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
-    color: #fff;
-    padding: 0 20px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    z-index: 2;
+    color: #fff; padding: 0 16px; height: 100%;
+    display: flex; align-items: center; font-weight: 700; font-size: 10px;
+    letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
     border-radius: 11px 0 0 11px;
   }
-  .ticker-content {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    overflow: hidden;
-  }
+  .ticker-content { flex: 1; height: 100%; display: flex; align-items: center; padding: 0 10px; overflow: hidden; }
   .ticker-content marquee { color: var(--text-primary); font-weight: 400; font-size: 13px; margin: 0; width: 100%; }
   .ticker-item { display: inline-flex; align-items: center; gap: 8px; margin-right: 50px; }
   .ticker-icon { color: var(--accent-violet); }
+
+  /* LOGIN */
+  .role-login label { display: block; margin-top: 18px; font-weight: 500; font-size: 14px; color: var(--text-secondary); }
 
   /* FORM */
   form { max-width: 800px; margin: 0 auto; }
   .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   label { display: block; margin-top: 20px; font-weight: 500; font-size: 14px; color: var(--text-secondary); }
-  /* TEXT INPUTS & SELECT */
-  input[type="text"], 
-  input[type="email"], 
-  input[type="tel"], 
-  input[type="password"], 
-  input[type="date"],
-  select, 
-  textarea { 
-    width: 100%; 
-    padding: 14px 16px; 
-    margin-top: 8px; 
-    background: #1a1a1a;
-    border: 1px solid var(--glass-border); 
-    border-radius: 10px; 
-    font-size: 15px; 
-    color: #fff;
+  input[type="text"], input[type="email"], input[type="tel"],
+  input[type="password"], input[type="date"], select, textarea {
+    width: 100%; padding: 14px 16px; margin-top: 8px;
+    background: var(--input-bg); border: 1px solid var(--glass-border);
+    border-radius: 10px; font-size: 15px; color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
     transition: var(--transition);
   }
-
-  /* RADIO & CHECKBOX (Fix for click glitch) */
-  input[type="radio"], 
-  input[type="checkbox"] {
-    accent-color: var(--accent-violet);
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    margin: 0;
-    vertical-align: middle;
+  input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--accent-violet); width: 20px; height: 20px;
+    cursor: pointer; margin: 0; vertical-align: middle;
   }
-
-  select option {
-    background: #1a1a1a;
-    color: #fff;
-  }
-
+  select option { background: #1a1a1a; color: #fff; }
   input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--accent-violet);
-    background: rgba(139, 92, 246, 0.05);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+    outline: none; border-color: var(--accent-violet);
+    background: rgba(139,92,246,0.05);
+    box-shadow: 0 0 15px rgba(139,92,246,0.2);
   }
-  
-  .radio-group { 
-    display: flex; 
-    gap: 24px; 
-    margin-top: 15px; 
-    align-items: center;
-  }
-  .radio-group label { 
-    margin-top: 0 !important; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    cursor: pointer; 
-    color: var(--text-primary);
-    font-size: 15px;
-  }
+  .radio-group { display: flex; gap: 24px; margin-top: 15px; align-items: center; }
+  .radio-group label { margin-top: 0 !important; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-primary); font-size: 15px; }
+
+  .error-msg { color: var(--error); font-size: 12px; margin-top: 5px; display: none; }
+  .error-msg.show { display: block; animation: fadeIn 0.3s; }
+  input.invalid, select.invalid, textarea.invalid { border-color: var(--error); }
+  input.valid { border-color: var(--success); }
 
   .btn-group { margin-top: 30px; display: flex; gap: 15px; }
-  button { 
-    padding: 14px 32px; 
-    border: none; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    font-size: 15px; 
-    font-weight: 600; 
-    transition: var(--transition);
+  button { padding: 14px 32px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: var(--transition); font-family: 'Outfit', sans-serif; }
+  .submit-btn {
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
+    color: #fff; box-shadow: 0 4px 15px rgba(139,92,246,0.3);
   }
-  .submit-btn { 
-    background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta)); 
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  .submit-btn:hover { transform: scale(1.03); box-shadow: 0 6px 22px rgba(139,92,246,0.5); }
+  .submit-btn:active { transform: scale(0.98); }
+  .reset-btn { background: rgba(255,255,255,0.1); color: #fff; }
+  .reset-btn:hover { background: rgba(255,255,255,0.18); }
+
+  /* SUCCESS TOAST */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
+    color: #fff; padding: 16px 28px; border-radius: 12px; font-weight: 600;
+    z-index: 9999; box-shadow: 0 8px 30px rgba(139,92,246,0.4);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   }
-  .submit-btn:hover { 
-    transform: scale(1.02); 
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
-  }
-  .reset-btn { background: rgba(255, 255, 255, 0.1); color: #fff; }
-  .reset-btn:hover { background: rgba(255, 255, 255, 0.15); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
 
   /* TABLES */
   .table-wrap { overflow-x: auto; margin-top: 20px; }
   table { width: 100%; border-collapse: separate; border-spacing: 0; }
-  table th, table td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--glass-border); }
-  table th { 
-    background: rgba(139, 92, 246, 0.1); 
-    color: var(--accent-violet); 
-    font-weight: 600; 
-    text-transform: uppercase; 
-    font-size: 12px; 
-    letter-spacing: 1px;
+  table th, table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--glass-border); }
+  table th {
+    background: rgba(139,92,246,0.1); color: var(--accent-violet);
+    font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;
   }
   table th:first-child { border-top-left-radius: 12px; }
   table th:last-child { border-top-right-radius: 12px; }
   table tr:last-child td { border-bottom: none; }
-  table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+  table tr:hover td { background: rgba(255,255,255,0.025); }
+  .grade-A { color: #10B981; font-weight: 700; text-shadow: 0 0 10px rgba(16,185,129,0.3); }
+  .grade-B { color: #3B82F6; font-weight: 700; text-shadow: 0 0 10px rgba(59,130,246,0.3); }
+  .grade-C { color: #F59E0B; font-weight: 700; }
 
-  .grade-A { color: #10B981; font-weight: 700; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
-  .grade-B { color: #3B82F6; font-weight: 700; text-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-  .grade-C { color: #F59E0B; font-weight: 700; text-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+  /* CONTACT */
+  .contact-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--glass-border); }
+  .contact-icon { font-size: 22px; }
+  .contact-item span { font-size: 14px; color: var(--text-secondary); }
+  .social-links { display: flex; gap: 12px; margin-top: 20px; }
+  .social-link {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: 16px;
+    transition: var(--transition);
+  }
+  .social-link:hover { background: rgba(139,92,246,0.2); border-color: var(--accent-violet); transform: translateY(-3px); }
 
   /* FOOTER */
-  footer { padding: 60px 0; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-secondary); }
+  footer { padding: 50px 0; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-secondary); }
   footer p { font-size: 14px; opacity: 0.8; }
 
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    header .container { flex-direction: column; text-align: center; }
-    .student-info { border-left: none; border-top: 1px solid var(--glass-border); padding: 15px 0 0; text-align: center; }
-    .two-col { grid-template-columns: 1fr; }
-    .input-grid { grid-template-columns: 1fr; }
-    h2 { font-size: 24px; }
+  /* BACK TO TOP */
+  #back-to-top {
+    position: fixed; bottom: 30px; right: 30px; z-index: 999;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-magenta));
+    color: #fff; border: none; font-size: 20px; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+    transition: var(--transition);
+    animation: bounce 1.5s infinite;
   }
+  #back-to-top:hover { transform: scale(1.1); }
+  #back-to-top.visible { display: flex; }
 
-  /* ANIMATIONS */
+  /* ===== ANIMATIONS ===== */
+
+  /* 1. FADE IN */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  section { animation: fadeIn 0.8s ease-out forwards; }
+
+  /* 2. SLIDE IN */
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* 3. BOUNCE */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* 4. PULSE GLOW */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.4); }
+    50% { box-shadow: 0 0 35px rgba(139,92,246,0.8); }
+  }
+
+  /* 5. ROTATE FLOAT (icons) */
+  @keyframes rotate-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(5deg); }
+    75% { transform: translateY(2px) rotate(-3deg); }
+  }
+
+  /* 6. ZOOM IN */
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* SCROLL-TRIGGERED ANIMATION CLASS */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2,1fr); }
+    .features-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width: 768px) {
+    body { padding-top: 210px; }
+    header .container { flex-direction: column; text-align: center; }
+    .header-right { flex-direction: column; gap: 10px; }
+    .student-info { border-left: none; border-top: 1px solid var(--glass-border); padding: 12px 0 0; text-align: center; }
+    #datetime-display { border-left: none; border-top: 1px solid var(--glass-border); padding: 10px 0 0; }
+    .two-col { grid-template-columns: 1fr; }
+    .input-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    h2 { font-size: 22px; }
+  }
+  @media (max-width: 600px) {
+    .stats { grid-template-columns: 1fr; }
+    .card { padding: 24px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- HEADER & NAVIGATION WRAPPER -->
+<!-- ===== NOTIFICATION PANEL ===== -->
+<div class="notif-panel" id="notifPanel">
+  <div class="glass" style="padding:20px;">
+    <button class="close-notif" onclick="toggleNotif()">✕</button>
+    <h3>🔔 Notifications <span style="font-size:13px;color:var(--text-secondary);">(3 new)</span></h3>
+    <div class="notif-item"><strong>📢 Mid-term Results Published</strong><br>Check your grades in the Reports section.</div>
+    <div class="notif-item"><strong>📅 Parent-Teacher Summit</strong><br>Virtual event on June 30th. Registration open now.</div>
+    <div class="notif-item"><strong>🆕 Analytics Dashboard</strong><br>Advanced performance analytics are now live.</div>
+    <div class="notif-item" style="color:var(--text-secondary);font-size:12px;">Last updated: just now</div>
+  </div>
+</div>
+
+<!-- ===== FIXED TOP WRAPPER ===== -->
 <div class="fixed-top">
   <header>
     <div class="container">
       <div class="brand">
-        <img src="logo.jpg" alt="EduTrack Logo" style="height: 50px; width: 50px; border-radius: 10px; object-fit: cover;">
+        <div class="brand-logo-mock">E</div>
         <div>
           <h1>EduTrack</h1>
           <p>Advanced Student Management</p>
         </div>
       </div>
-      <div class="student-info">
-        <p>Student: <strong>Madhavan</strong></p>
-        <p>Reg No: <strong>029</strong></p>
+      <div class="header-right">
+        <div id="datetime-display">
+          <div class="time" id="clock">00:00:00</div>
+          <div id="date-display" style="font-size:12px;"></div>
+        </div>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀️ Light Mode</button>
+        <button class="notif-btn" onclick="toggleNotif()">
+          🔔
+          <span class="notif-badge" id="notifBadge">3</span>
+        </button>
+        <div class="student-info" style="display:flex; align-items:center; gap:12px;">
+          <div>
+            <p>Student: <strong>Madhavan</strong></p>
+            <p>Reg No: <strong>029</strong></p>
+          </div>
+          <div style="font-size: 24px; background: rgba(139,92,246,0.1); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 1px solid var(--glass-border);">👤</div>
+        </div>
       </div>
     </div>
   </header>
-  
+
   <nav class="container">
     <div class="glass">
       <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#reports">Reports</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#logout" style="color: var(--accent-magenta);">Logout</a></li>
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#reports" class="nav-link">Reports</a></li>
+        <li><a href="#register" class="nav-link">Register</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="#footer" class="nav-link" style="color:var(--accent-magenta);">Logout</a></li>
       </ul>
     </div>
   </nav>
 
   <div class="container">
     <div class="news-ticker-container glass">
-      <div class="ticker-label">Latest Update</div>
+      <div class="ticker-label">📡 Live Updates</div>
       <div class="ticker-content">
         <marquee behavior="scroll" direction="left" scrollamount="6">
-          <span class="ticker-item"><span class="ticker-icon">📢</span> SYSTEM ALERT: Mid-term report cards are now accessible in the Scholar Portal.</span>
-          <span class="ticker-item"><span class="ticker-icon">📢</span> UPCOMING: Global Parent-Teacher Virtual Summit on June 30th.</span>
-          <span class="ticker-item"><span class="ticker-icon">📢</span> NEW: Advanced performance analytics dashboard is now live for all parents.</span>
+          <span class="ticker-item"><span class="ticker-icon">📢</span> Mid-term report cards are now accessible in the Scholar Portal.</span>
+          <span class="ticker-item"><span class="ticker-icon">📅</span> Global Parent-Teacher Virtual Summit on June 30th.</span>
+          <span class="ticker-item"><span class="ticker-icon">🆕</span> Advanced performance analytics dashboard is now live for all parents.</span>
+          <span class="ticker-item"><span class="ticker-icon">🏆</span> Top performer of the month: Aaditi Rajan — Computer Science 98/100!</span>
+          <span class="ticker-item"><span class="ticker-icon">📝</span> Assignment 2 submission deadline: July 5th, 2026.</span>
         </marquee>
       </div>
     </div>
   </div>
 </div>
 
-<!-- WELCOME SECTION -->
-<section id="home">
+<!-- ===== WELCOME / HERO SECTION ===== -->
+<section id="home" style="animation: fadeIn 0.9s ease-out;">
   <div class="container">
-    <div class="welcome glass card">
-      <h2>Welcome to EduTrack</h2>
+    <!-- IMAGE SLIDER -->
+    <div class="slider-wrap reveal">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide" style="background-image: url('edutrack_bg_1_1782121706433.png')">
+          🎓 Welcome to EduTrack
+          <p>Your next-generation student management platform for academic excellence.</p>
+        </div>
+        <div class="slide" style="background-image: url('edutrack_bg_2_1782121723366.png')">
+          📊 Real-Time Analytics
+          <p>Track grades, attendance, and performance all in one place.</p>
+        </div>
+        <div class="slide" style="background-image: url('edutrack_bg_3_1782121738848.png')">
+          🌱 Grow Every Day
+          <p>Personalized insights to help every student reach their potential.</p>
+        </div>
+      </div>
+      <button class="slider-btn slider-prev" onclick="changeSlide(-1)">‹</button>
+      <button class="slider-btn slider-next" onclick="changeSlide(1)">›</button>
+    </div>
+    <div class="slider-dots" id="sliderDots">
+      <span class="active" onclick="goToSlide(0)"></span>
+      <span onclick="goToSlide(1)"></span>
+      <span onclick="goToSlide(2)"></span>
+    </div>
+
+    <!-- WELCOME BANNER -->
+    <div class="welcome glass card" style="margin-top:30px; animation: slideInLeft 0.8s ease-out;">
+      <h2>Welcome to <span class="typing-text" id="typing-target"></span><span class="typing-cursor">|</span></h2>
       <p>EduTrack is a next-generation Student Management System that empowers <strong>Students</strong>, <strong>Teachers</strong>, and <strong>Parents</strong> with real-time academic insights in one secure, premium platform.</p>
-      <div class="two-col" style="margin-top: 30px;">
+      <div class="two-col" style="margin-top: 24px;">
         <div>
-          <p><strong>Vision:</strong> To create a transparent bridge between school, students, and home through accessible academic data.</p>
+          <p><strong>🎯 Vision:</strong> To create a transparent bridge between school, students, and home through accessible academic data that drives better decisions.</p>
         </div>
         <div>
-          <p><strong>Mission:</strong> To simplify performance tracking and improve communication between teachers, students, and parents.</p>
+          <p><strong>🚀 Mission:</strong> To simplify performance tracking and improve communication between teachers, students, and parents through intelligent tooling.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ROLE-BASED LOGIN -->
+<!-- ===== LOGIN PORTAL ===== -->
 <section>
   <div class="container">
-    <div class="glass card" style="max-width: 500px; margin: 0 auto;">
+    <div class="glass card reveal" style="max-width:500px;margin:0 auto;">
       <h2>Login Portal</h2>
       <div class="role-login">
         <label for="role">Select Your Role</label>
@@ -419,245 +627,566 @@
           <option value="teacher">Teacher</option>
           <option value="parent">Parent</option>
         </select>
-  
         <label for="accountid">Account ID</label>
-        <input type="text" id="accountid" name="accountid" placeholder="Enter your Account ID">
-  
+        <input type="text" id="accountid" placeholder="Enter your Account ID">
         <label for="loginpass">Password</label>
-        <input type="password" id="loginpass" name="loginpass" placeholder="Enter your password">
-  
+        <input type="password" id="loginpass" placeholder="Enter your password">
         <div class="btn-group">
-          <button type="submit" class="submit-btn" style="width: 100%;">Access Dashboard</button>
+          <button class="submit-btn" onclick="handleLogin()" style="width:100%;">Access Dashboard</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DASHBOARD STATISTICS -->
+<!-- ===== DASHBOARD STATS ===== -->
 <section id="dashboard">
   <div class="container">
     <h2>Academic Insights</h2>
     <div class="stats">
-      <div class="stat-box glass"><h3>1,250</h3><p>Total Scholars</p></div>
-      <div class="stat-box glass"><h3>980</h3><p>Active Profiles</p></div>
-      <div class="stat-box glass"><h3 style="color: var(--accent-magenta);">₹85K</h3><p>Revenue Stream</p></div>
-      <div class="stat-box glass"><h3>3,420</h3><p>Knowledge Trans.</p></div>
-      <div class="stat-box glass"><h3>27</h3><p>Notifications</p></div>
-      <div class="stat-box glass"><h3 style="color: var(--accent-violet);">9</h3><p>Strategic Tasks</p></div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">🎓</div>
+        <h3><span class="counter" data-target="1250">0</span></h3>
+        <p>Total Scholars</p>
+      </div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">✅</div>
+        <h3><span class="counter" data-target="980">0</span></h3>
+        <p>Active Profiles</p>
+      </div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">💰</div>
+        <h3 style="color:var(--accent-magenta);">₹<span class="counter" data-target="85">0</span>K</h3>
+        <p>Revenue Stream</p>
+      </div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">📚</div>
+        <h3><span class="counter" data-target="3420">0</span></h3>
+        <p>Knowledge Trans.</p>
+      </div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">🔔</div>
+        <h3><span class="counter" data-target="27">0</span></h3>
+        <p>Notifications</p>
+      </div>
+      <div class="stat-box glass reveal">
+        <div class="stat-icon">📋</div>
+        <h3 style="color:var(--accent-violet);"><span class="counter" data-target="9">0</span></h3>
+        <p>Strategic Tasks</p>
+      </div>
+    </div>
+
+    <!-- PROGRESS BARS -->
+    <div class="glass card reveal" style="margin-top:30px;">
+      <h2>Platform Activity</h2>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Student Engagement</span><span>92%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="92"></div></div>
+      </div>
+      <div class="progress-wrap" style="margin-top:16px;">
+        <div class="progress-label"><span>Assignment Completion</span><span>78%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="78"></div></div>
+      </div>
+      <div class="progress-wrap" style="margin-top:16px;">
+        <div class="progress-label"><span>Attendance Rate</span><span>88%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" data-width="88"></div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES & SERVICES -->
-<section>
+<!-- ===== FEATURES ===== -->
+<section id="features">
   <div class="container">
-    <div class="two-col">
-      <div class="glass card">
-        <h2>Premium Features</h2>
-        <ul>
-          <li><strong>Role-optimized Dashboards:</strong> Custom views for every user type.</li>
-          <li><strong>Deep Analytics:</strong> Real-time report card & score tracking.</li>
-          <li><strong>Smart Attendance:</strong> Precise monitoring with history.</li>
-          <li><strong>Dynamic Visuals:</strong> Performance graphs & progress reports.</li>
-          <li><strong>Privacy First:</strong> Secure profile & data isolation.</li>
-        </ul>
+    <h2>Premium Features</h2>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <h3>Deep Analytics</h3>
+        <p>Real-time report card and score tracking with smart trend detection.</p>
       </div>
-      <div id="services" class="glass card">
-        <h2>Expert Services</h2>
-        <ol style="color: var(--text-secondary);">
-          <li>Automated Report Card Generation</li>
-          <li>Advanced Grade & Marks Entry Interface</li>
-          <li>Encrypted Parent-Teacher Portal</li>
-          <li>Instant Result Publishing Engine</li>
-          <li>Personalized Performance Analytics</li>
-        </ol>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📅</div>
+        <h3>Smart Attendance</h3>
+        <p>Precise monitoring with full attendance history and absence alerts.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy First</h3>
+        <p>Encrypted data isolation ensures each profile stays completely private.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎯</div>
+        <h3>Role Dashboards</h3>
+        <p>Custom views and controls optimised for every user type.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📈</div>
+        <h3>Dynamic Visuals</h3>
+        <p>Interactive charts and progress bars that update in real time.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💬</div>
+        <h3>Parent Portal</h3>
+        <p>Direct encrypted messaging channel between teachers and parents.</p>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- REGISTRATION FORM -->
-<section>
+<!-- ===== SERVICES ===== -->
+<section id="services">
   <div class="container">
-    <div class="glass card">
-      <h2>Join the Elite Network</h2>
-      <form>
+    <h2>Expert Services</h2>
+    <div class="services-grid">
+      <div class="service-item reveal">
+        <div class="service-num">01</div>
+        <div>
+          <h4>Automated Report Card Generation</h4>
+          <p>Generate polished report cards with a single click for any student or class.</p>
+        </div>
+      </div>
+      <div class="service-item reveal">
+        <div class="service-num">02</div>
+        <div>
+          <h4>Advanced Grade & Marks Entry</h4>
+          <p>Bulk entry interface for educators with real-time validation and rollback.</p>
+        </div>
+      </div>
+      <div class="service-item reveal">
+        <div class="service-num">03</div>
+        <div>
+          <h4>Encrypted Parent-Teacher Portal</h4>
+          <p>Secure, role-isolated messaging for seamless stakeholder collaboration.</p>
+        </div>
+      </div>
+      <div class="service-item reveal">
+        <div class="service-num">04</div>
+        <div>
+          <h4>Instant Result Publishing</h4>
+          <p>Push results to students and parents simultaneously with one action.</p>
+        </div>
+      </div>
+      <div class="service-item reveal">
+        <div class="service-num">05</div>
+        <div>
+          <h4>Predictive Performance Analytics</h4>
+          <p>AI-assisted trend analysis across terms to forecast student outcomes.</p>
+        </div>
+      </div>
+      <div class="service-item reveal">
+        <div class="service-num">06</div>
+        <div>
+          <h4>Attendance Notifications</h4>
+          <p>Automatic SMS and email alerts sent to parents on absences.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REGISTRATION FORM ===== -->
+<section id="register">
+  <div class="container">
+    <div class="glass card reveal">
+      <h2>Join the Network</h2>
+      <form id="regForm" novalidate>
         <div class="input-grid">
           <div>
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="John Doe" required>
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" placeholder="John Doe">
+            <div class="error-msg" id="err-name">Please enter your full name (min 3 characters).</div>
           </div>
           <div>
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" placeholder="john@example.com">
+            <div class="error-msg" id="err-email">Please enter a valid email address.</div>
+          </div>
+        </div>
+        <div class="input-grid">
+          <div>
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" placeholder="+91 00000 00000">
+            <div class="error-msg" id="err-phone">Enter a valid 10-digit phone number.</div>
+          </div>
+          <div>
+            <label for="password">Password *</label>
+            <input type="password" id="password" placeholder="Min 8 characters">
+            <div class="error-msg" id="err-password">Password must be at least 8 characters.</div>
+          </div>
+        </div>
+        <div class="input-grid">
+          <div>
+            <label for="dob">Date of Birth *</label>
+            <input type="date" id="dob">
+            <div class="error-msg" id="err-dob">Please select your date of birth.</div>
+          </div>
+          <div>
+            <label for="usertype">Registration Role</label>
+            <select id="usertype" style="margin-top:8px;">
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="parent">Parent</option>
+            </select>
           </div>
         </div>
 
-        <div class="input-grid">
-          <div>
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000" required>
-          </div>
-          <div>
-            <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" name="dob">
-          </div>
-        </div>
-
-        <label>Gender Profile</label>
+        <label>Gender *</label>
         <div class="radio-group">
           <label><input type="radio" name="gender" value="male"> Male</label>
           <label><input type="radio" name="gender" value="female"> Female</label>
           <label><input type="radio" name="gender" value="other"> Other</label>
         </div>
+        <div class="error-msg" id="err-gender">Please select your gender.</div>
 
-        <label for="address">Residential Address</label>
-        <textarea id="address" name="address" rows="3" placeholder="Enter full address details..."></textarea>
-
-        <label for="usertype">Registration Role</label>
-        <select id="usertype" name="usertype">
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-          <option value="parent">Parent</option>
-        </select>
+        <label for="address">Residential Address *</label>
+        <textarea id="address" rows="3" placeholder="Enter your full address..."></textarea>
+        <div class="error-msg" id="err-address">Please enter your address.</div>
 
         <div class="btn-group">
-          <button type="submit" class="submit-btn">Complete Registration</button>
-          <button type="reset" class="reset-btn">Clear Form</button>
+          <button type="button" class="submit-btn" onclick="validateForm()">Complete Registration</button>
+          <button type="reset" class="reset-btn" onclick="resetErrors()">Clear Form</button>
         </div>
       </form>
     </div>
   </div>
 </section>
 
-<!-- REPORT CARD / PERFORMANCE TABLE -->
+<!-- ===== PERFORMANCE TABLE ===== -->
 <section id="reports">
   <div class="container">
-    <div class="glass card">
+    <div class="glass card reveal">
       <h2>Performance Analytics</h2>
       <div class="table-wrap">
         <table>
           <tr>
-            <th>Subject Detail</th>
-            <th>Score (100)</th>
-            <th>Grade</th>
-            <th>Expert Remarks</th>
+            <th>Subject</th><th>Score (100)</th><th>Grade</th><th>Remarks</th>
           </tr>
-          <tr>
-            <td>Mathematics</td>
-            <td><strong>92</strong></td>
-            <td><span class="grade-A">A+</span></td>
-            <td>Excellent analytical and problem-solving skills</td>
-          </tr>
-          <tr>
-            <td>Science</td>
-            <td><strong>85</strong></td>
-            <td><span class="grade-A">A</span></td>
-            <td>Strong conceptual understanding of core principles</td>
-          </tr>
-          <tr>
-            <td>English</td>
-            <td><strong>78</strong></td>
-            <td><span class="grade-B">B+</span></td>
-            <td>Fluid communication, subtle grammar refinements needed</td>
-          </tr>
-          <tr>
-            <td>Social Studies</td>
-            <td><strong>70</strong></td>
-            <td><span class="grade-B">B</span></td>
-            <td>Satisfactory performance in historical mapping</td>
-          </tr>
-          <tr>
-            <td>Computer Science</td>
-            <td><strong>95</strong></td>
-            <td><span class="grade-A">A++</span></td>
-            <td>Outstanding logic and architectural thinking</td>
-          </tr>
+          <tr><td>Mathematics</td><td><strong>92</strong></td><td><span class="grade-A">A+</span></td><td>Excellent analytical skills</td></tr>
+          <tr><td>Science</td><td><strong>85</strong></td><td><span class="grade-A">A</span></td><td>Strong conceptual understanding</td></tr>
+          <tr><td>English</td><td><strong>78</strong></td><td><span class="grade-B">B+</span></td><td>Fluid communication, minor refinements needed</td></tr>
+          <tr><td>Social Studies</td><td><strong>70</strong></td><td><span class="grade-B">B</span></td><td>Satisfactory performance</td></tr>
+          <tr><td>Computer Science</td><td><strong>95</strong></td><td><span class="grade-A">A++</span></td><td>Outstanding logic and architecture</td></tr>
         </table>
       </div>
     </div>
   </div>
 </section>
 
-<!-- APPLICATION MODULES TABLE -->
+<!-- ===== SYSTEM ARCHITECTURE TABLE ===== -->
 <section>
   <div class="container">
-    <div class="glass card">
+    <div class="glass card reveal">
       <h2>System Architecture</h2>
       <div class="table-wrap">
         <table>
-          <tr>
-            <th>Module ID</th>
-            <th>System Component</th>
-            <th>Operational Description</th>
-          </tr>
-          <tr>
-            <td>MS-001</td>
-            <td>Neural Authentication</td>
-            <td>Role-optimized encryption for Student, Educator, and Parent tiers.</td>
-          </tr>
-          <tr>
-            <td>MS-002</td>
-            <td>Insight Engine</td>
-            <td>Dynamically generates high-fidelity report cards and performance datasets.</td>
-          </tr>
-          <tr>
-            <td>MS-003</td>
-            <td>Presence Tracker</td>
-            <td>High-precision daily attendance monitoring with recursive history.</td>
-          </tr>
-          <tr>
-            <td>MS-004</td>
-            <td>Predictive Analytics</td>
-            <td>Advanced trend analysis and cross-term performance benchmarks.</td>
-          </tr>
-          <tr>
-            <td>MS-005</td>
-            <td>Unified Nexus</td>
-            <td>Encrypted communication channel bridge for seamless stakeholder collaboration.</td>
-          </tr>
+          <tr><th>Module ID</th><th>Component</th><th>Description</th></tr>
+          <tr><td>MS-001</td><td>Neural Authentication</td><td>Role-optimized encryption for Student, Educator, and Parent tiers.</td></tr>
+          <tr><td>MS-002</td><td>Insight Engine</td><td>Dynamically generates high-fidelity report cards and performance datasets.</td></tr>
+          <tr><td>MS-003</td><td>Presence Tracker</td><td>High-precision daily attendance monitoring with recursive history.</td></tr>
+          <tr><td>MS-004</td><td>Predictive Analytics</td><td>Advanced trend analysis and cross-term performance benchmarks.</td></tr>
+          <tr><td>MS-005</td><td>Unified Nexus</td><td>Encrypted communication channel bridge for seamless stakeholder collaboration.</td></tr>
         </table>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT & CONTACT -->
+<!-- ===== ABOUT & CONTACT ===== -->
 <section id="about">
   <div class="container">
     <div class="two-col">
-      <div class="glass card">
+      <div class="glass card reveal">
         <h2>About Project</h2>
-        <p>EduTrack is a high-fidelity academic project designed to showcase the future of educational management. By integrating role-specific insights with a premium dark interface, we aim to redefine how academic progress is perceived and managed.</p>
+        <p>EduTrack is a high-fidelity academic project designed to showcase the future of educational management. Built with pure HTML, CSS, and JavaScript, it demonstrates how interactive UIs can improve academic clarity without relying on frameworks.</p>
       </div>
-      <div id="contact" class="glass card">
+      <div id="contact" class="glass card reveal">
         <h2>Connect With Us</h2>
-        <p>📧 <span style="color: var(--accent-violet);">support@scholartrack.io</span></p>
-        <p>📞 +91 98765 43210</p>
-        <p>📍 Tech Hub, Knowledge Avenue, Tamil Nadu</p>
-        <div class="btn-group" style="margin-top: 15px;">
-          <a href="#" style="color: #fff; text-decoration: none; font-size: 20px;">𝕏</a>
-          <a href="#" style="color: #fff; text-decoration: none; font-size: 20px;">in</a>
-          <a href="#" style="color: #fff; text-decoration: none; font-size: 20px;">ig</a>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <span style="color:var(--accent-violet);">support@scholartrack.io</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <span>+91 98765 43210</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <span>Tech Hub, Knowledge Avenue, Tamil Nadu</span>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">ig</a>
+          <a href="#" class="social-link">gh</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer id="logout">
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
   <div class="container">
-    <div class="brand" style="justify-content: center; margin-bottom: 20px;">
-      <div class="brand-logo-mock" style="width: 32px; height: 32px; font-size: 14px;">S</div>
-      <h1 style="font-size: 20px;">EduTrack</h1>
+    <div class="brand" style="justify-content:center;margin-bottom:16px;">
+      <div class="brand-logo-mock" style="width:32px;height:32px;font-size:14px;">E</div>
+      <div>
+        <h1 style="font-size:20px;">EduTrack</h1>
+        <p>Advanced Student Management</p>
+      </div>
     </div>
-    <p>&copy; 2026 EduTrack. Designed by Madhavan</p>
-    <p style="font-size: 11px; margin-top: 10px; color: var(--accent-magenta);">PREMIUM ENTERPRISE EDITION v4.0</p>
+    <p>&copy; 2026 EduTrack. Designed by <strong>Madhavan</strong> (Reg No: 029)</p>
+    <p style="font-size:11px;margin-top:8px;color:var(--accent-magenta);">PREMIUM ENTERPRISE EDITION v4.0 — 23IT721 Full Stack Lab</p>
+    <div class="social-links" style="justify-content:center;margin-top:18px;">
+      <a href="#" class="social-link">𝕏</a>
+      <a href="#" class="social-link">in</a>
+      <a href="#" class="social-link">ig</a>
+      <a href="#" class="social-link">gh</a>
+    </div>
   </div>
 </footer>
 
+<!-- BACK TO TOP -->
+<button id="back-to-top" onclick="scrollToTop()" title="Back to Top">↑</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // ============================
+  // 1. DATE & TIME DISPLAY
+  // ============================
+  function updateClock() {
+    const now = new Date();
+    const timeEl = document.getElementById('clock');
+    const dateEl = document.getElementById('date-display');
+    timeEl.textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    dateEl.textContent = now.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ============================
+  // 2. THEME SWITCHER
+  // ============================
+  let isDark = true;
+  function toggleTheme() {
+    isDark = !isDark;
+    document.body.classList.toggle('light-mode', !isDark);
+    document.getElementById('themeBtn').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+  }
+
+  // ============================
+  // 3. NOTIFICATION PANEL
+  // ============================
+  function toggleNotif() {
+    const panel = document.getElementById('notifPanel');
+    panel.classList.toggle('show');
+    if (panel.classList.contains('show')) {
+      document.getElementById('notifBadge').style.display = 'none';
+    }
+  }
+  document.addEventListener('click', function(e) {
+    const panel = document.getElementById('notifPanel');
+    if (!panel.contains(e.target) && !e.target.closest('.notif-btn')) {
+      panel.classList.remove('show');
+    }
+  });
+
+  // ============================
+  // 4. IMAGE SLIDER
+  // ============================
+  let currentSlide = 0;
+  const totalSlides = 3;
+  let sliderInterval;
+
+  function goToSlide(n) {
+    currentSlide = (n + totalSlides) % totalSlides;
+    document.getElementById('sliderTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.slider-dots span').forEach((d, i) => {
+      d.classList.toggle('active', i === currentSlide);
+    });
+  }
+  function changeSlide(dir) {
+    goToSlide(currentSlide + dir);
+    clearInterval(sliderInterval);
+    startSlider();
+  }
+  function startSlider() {
+    sliderInterval = setInterval(() => goToSlide(currentSlide + 1), 4000);
+  }
+  startSlider();
+
+  // ============================
+  // 5. TYPING EFFECT
+  // ============================
+  const typingPhrases = ['EduTrack', 'Academic Excellence', 'Smart Learning', 'Your Future'];
+  let typeIdx = 0, charIdx = 0, deleting = false;
+  function typeEffect() {
+    const el = document.getElementById('typing-target');
+    const phrase = typingPhrases[typeIdx];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ++charIdx);
+      if (charIdx === phrase.length) { deleting = true; setTimeout(typeEffect, 1800); return; }
+    } else {
+      el.textContent = phrase.slice(0, --charIdx);
+      if (charIdx === 0) { deleting = false; typeIdx = (typeIdx + 1) % typingPhrases.length; }
+    }
+    setTimeout(typeEffect, deleting ? 60 : 100);
+  }
+  typeEffect();
+
+  // ============================
+  // 6. COUNTER ANIMATION
+  // ============================
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const step = Math.ceil(target / 80);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current.toLocaleString();
+      if (current >= target) clearInterval(timer);
+    }, 20);
+  }
+
+  // ============================
+  // 7. SCROLL REVEAL + COUNTERS + PROGRESS BARS
+  // ============================
+  const reveals = document.querySelectorAll('.reveal');
+  const countersTriggered = new Set();
+  const progressTriggered = new Set();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Trigger counters
+        entry.target.querySelectorAll('.counter').forEach(c => {
+          if (!countersTriggered.has(c)) { countersTriggered.add(c); animateCounter(c); }
+        });
+        // Trigger progress bars
+        entry.target.querySelectorAll('.progress-bar-fill').forEach(p => {
+          if (!progressTriggered.has(p)) {
+            progressTriggered.add(p);
+            setTimeout(() => { p.style.width = p.dataset.width + '%'; }, 200);
+          }
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Also observe the section containing stats (not in .reveal)
+  document.querySelectorAll('.counter').forEach(c => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !countersTriggered.has(c)) {
+          countersTriggered.add(c); animateCounter(c);
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(c);
+  });
+  document.querySelectorAll('.progress-bar-fill').forEach(p => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !progressTriggered.has(p)) {
+          progressTriggered.add(p);
+          setTimeout(() => { p.style.width = p.dataset.width + '%'; }, 200);
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(p);
+  });
+
+  // ============================
+  // 8. ACTIVE NAV HIGHLIGHTING
+  // ============================
+  const sections = document.querySelectorAll('section[id], footer[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 220) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    // Back-to-top visibility
+    document.getElementById('back-to-top').classList.toggle('visible', window.scrollY > 300);
+  });
+
+  // ============================
+  // 9. BACK TO TOP
+  // ============================
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ============================
+  // 10. FORM VALIDATION
+  // ============================
+  function showError(id, show) {
+    document.getElementById('err-' + id).classList.toggle('show', show);
+    const input = document.getElementById(id);
+    if (input) { input.classList.toggle('invalid', show); input.classList.toggle('valid', !show); }
+  }
+  function resetErrors() {
+    ['name','email','phone','password','dob','gender','address'].forEach(f => showError(f, false));
+    document.querySelectorAll('input, textarea, select').forEach(el => { el.classList.remove('invalid','valid'); });
+  }
+  function validateForm() {
+    let valid = true;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const password = document.getElementById('password').value;
+    const dob = document.getElementById('dob').value;
+    const address = document.getElementById('address').value.trim();
+    const gender = document.querySelector('input[name="gender"]:checked');
+
+    if (name.length < 3) { showError('name', true); valid = false; } else showError('name', false);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', true); valid = false; } else showError('email', false);
+    if (!/^\+?[\d\s-]{10,14}$/.test(phone)) { showError('phone', true); valid = false; } else showError('phone', false);
+    if (password.length < 8) { showError('password', true); valid = false; } else showError('password', false);
+    if (!dob) { showError('dob', true); valid = false; } else showError('dob', false);
+    if (!gender) { showError('gender', true); valid = false; } else showError('gender', false);
+    if (address.length < 5) { showError('address', true); valid = false; } else showError('address', false);
+
+    if (valid) {
+      showToast('🎉 Registration successful! Welcome to EduTrack.');
+      document.getElementById('regForm').reset();
+      resetErrors();
+    } else {
+      showToast('⚠️ Please fix the errors in the form.', true);
+    }
+  }
+
+  // ============================
+  // 11. LOGIN HANDLER
+  // ============================
+  function handleLogin() {
+    const id = document.getElementById('accountid').value.trim();
+    const pass = document.getElementById('loginpass').value;
+    if (!id || !pass) { showToast('⚠️ Please enter your Account ID and Password.', true); return; }
+    showToast('✅ Login successful! Redirecting to dashboard...');
+  }
+
+  // ============================
+  // 12. TOAST
+  // ============================
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = isError
+      ? 'linear-gradient(135deg,#EF4444,#B91C1C)'
+      : 'linear-gradient(135deg,var(--accent-violet),var(--accent-magenta))';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
 </body>
 </html>
